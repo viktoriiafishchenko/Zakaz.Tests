@@ -14,8 +14,8 @@ namespace Novus.Api.Test.Models.Users
         [JsonProperty("is_horeca")]
         public bool IsHoreca { get; set; }
         
-        [JsonProperty("birthday")]
-        public string Birthday { get; set; }
+        [JsonProperty("birthdate")]
+        public string Birthdate { get; set; }
         
         [JsonProperty("last_visit")]
         public string LastVisit { get; set; }

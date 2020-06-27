@@ -38,6 +38,7 @@ namespace Novus.Api.Test.Clients
 
             return responseModel;
         }
+
         public ResponseErrorsModel LogInWithWrongDataRequest(RequestLogInModel model)
         {
             var message = _httpClient.PostAsJsonAsync(EndpointsHelper.UserLogIn, model).Result;
@@ -51,9 +52,9 @@ namespace Novus.Api.Test.Clients
             var message = _httpClient.GetAsync(EndpointsHelper.UserInfo).Result;
             message.StatusCode.Should().Be(HttpStatusCode.OK);
             var responseModel = message.Content.ReadAsAsync<ResponseUserInfoModel>().Result;
-
             return responseModel;
         }
+
         public ResponseErrorsModel GetInfoWithoutUnauthorizedRequest()
         {
             var message = _httpClient.GetAsync(EndpointsHelper.UserInfo).Result;
@@ -61,10 +62,41 @@ namespace Novus.Api.Test.Clients
             var responseModel = message.Content.ReadAsAsync<ResponseErrorsModel>().Result;
             return responseModel;
         }
+
         public void ChangeUserDataRequest(RequestChangeUserInfoModel model)
         {
             var message = _httpClient.PostAsJsonAsync(EndpointsHelper.UserPersonalInfo, model).Result;
             message.StatusCode.Should().Be(HttpStatusCode.OK);
+        }
+
+        public ResponseErrorsModel ChangeUserDataWithoutUnauthorizedRequest(RequestChangeUserInfoModel model)
+        {
+            var message = _httpClient.GetAsync(EndpointsHelper.UserPersonalInfo).Result;
+            message.StatusCode.Should().Be(HttpStatusCode.Unauthorized);
+            var responseModel = message.Content.ReadAsAsync<ResponseErrorsModel>().Result;
+            return responseModel;
+        }
+
+        public ResponseErrorsModel ReplacementUserInfoWithIncorrectParametersRequest(RequestChangeUserInfoModel model)
+        {
+            var message = _httpClient.PostAsJsonAsync(EndpointsHelper.UserPersonalInfo, model).Result;
+            message.StatusCode.Should().Be(HttpStatusCode.BadRequest);
+            var responseModel = message.Content.ReadAsAsync<ResponseErrorsModel>().Result;
+            return responseModel;
+        }
+
+        public void LogOutFromProfileRequest()
+        {
+            var message = _httpClient.PostAsync(EndpointsHelper.LogOut, null).Result;
+            message.StatusCode.Should().Be(HttpStatusCode.OK);
+        }
+
+        public ResponseSearchProduct SearchProductResponse(string searchProductName)
+        {
+            var message = _httpClient.GetAsync(EndpointsHelper.SearchProduct(searchProductName)).Result;
+            message.StatusCode.Should().Be(HttpStatusCode.OK);
+            var responseModel = message.Content.ReadAsAsync<ResponseSearchProduct>().Result;
+            return responseModel;
         }
     }
 }

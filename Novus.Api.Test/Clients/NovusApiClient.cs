@@ -12,6 +12,11 @@ namespace Novus.Api.Test.Clients
     {
         private HttpClient _httpClient;
 
+        public void ApplyLanguage(string languageCode)
+        {
+            _httpClient.DefaultRequestHeaders.Add("accept-language", languageCode);
+        }
+
         public NovusApiClient(params Cookie[] cookies)
         {
             var cookieContainer = new CookieContainer();
